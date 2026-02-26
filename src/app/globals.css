@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/* ─── Custom dark mode variant ─────────────────────────────────────────────── */
+/* Responds to data-theme="dark" attribute on <html> instead of media query    */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ─── Raw Color Palette ─────────────────────────────────────────────────────── */
+:root {
+  /* Neutral scale */
+  --palette-neutral-50:  #fafafa;
+  --palette-neutral-100: #f4f4f5;
+  --palette-neutral-200: #e4e4e7;
+  --palette-neutral-300: #d4d4d8;
+  --palette-neutral-400: #a1a1aa;
+  --palette-neutral-500: #71717a;
+  --palette-neutral-600: #52525b;
+  --palette-neutral-700: #3f3f46;
+  --palette-neutral-800: #27272a;
+  --palette-neutral-900: #18181b;
+  --palette-neutral-950: #09090b;
+
+  /* Brand — calm blue, trustworthy for a monitoring tool */
+  --palette-brand-50:  #eff6ff;
+  --palette-brand-100: #dbeafe;
+  --palette-brand-200: #bfdbfe;
+  --palette-brand-500: #3b82f6;
+  --palette-brand-600: #2563eb;
+  --palette-brand-700: #1d4ed8;
+
+  /* Status colors */
+  --palette-success-50:  #f0fdf4;
+  --palette-success-100: #dcfce7;
+  --palette-success-500: #22c55e;
+  --palette-success-600: #16a34a;
+
+  --palette-warning-50:  #fffbeb;
+  --palette-warning-100: #fef3c7;
+  --palette-warning-500: #f59e0b;
+  --palette-warning-600: #d97706;
+
+  --palette-danger-50:  #fef2f2;
+  --palette-danger-100: #fee2e2;
+  --palette-danger-500: #ef4444;
+  --palette-danger-600: #dc2626;
+}
+
+/* ─── Semantic Tokens — Light Mode ─────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --color-bg-app:         var(--palette-neutral-50);
+  --color-bg-surface:     #ffffff;
+  --color-bg-sunken:      var(--palette-neutral-100);
+  --color-bg-overlay:     #ffffff;
+
+  /* Sidebar — light in light mode */
+  --color-bg-sidebar:          #ffffff;
+  --color-border-sidebar:      var(--palette-neutral-200);
+  --color-text-sidebar:        var(--palette-neutral-600);
+  --color-text-sidebar-active: var(--palette-neutral-900);
+  --color-bg-sidebar-active:   var(--palette-neutral-100);
+  --color-bg-sidebar-hover:    var(--palette-neutral-50);
+
+  /* Text */
+  --color-text-primary:   var(--palette-neutral-900);
+  --color-text-secondary: var(--palette-neutral-500);
+  --color-text-tertiary:  var(--palette-neutral-400);
+  --color-text-inverse:   #ffffff;
+  --color-text-link:      var(--palette-brand-600);
+
+  /* Borders */
+  --color-border-default: var(--palette-neutral-200);
+  --color-border-strong:  var(--palette-neutral-300);
+  --color-border-focus:   var(--palette-brand-500);
+
+  /* Brand */
+  --color-brand:          var(--palette-brand-600);
+  --color-brand-hover:    var(--palette-brand-700);
+  --color-brand-subtle:   var(--palette-brand-50);
+  --color-brand-text:     var(--palette-brand-700);
+
+  /* Status */
+  --color-status-up:           var(--palette-success-500);
+  --color-status-up-bg:        var(--palette-success-50);
+  --color-status-up-text:      var(--palette-success-600);
+  --color-status-down:         var(--palette-danger-500);
+  --color-status-down-bg:      var(--palette-danger-50);
+  --color-status-down-text:    var(--palette-danger-600);
+  --color-status-paused:       var(--palette-warning-500);
+  --color-status-paused-bg:    var(--palette-warning-50);
+  --color-status-paused-text:  var(--palette-warning-600);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+}
+
+/* ─── Semantic Tokens — Dark Mode ───────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --color-bg-app:         var(--palette-neutral-950);
+  --color-bg-surface:     var(--palette-neutral-900);
+  --color-bg-sunken:      var(--palette-neutral-800);
+  --color-bg-overlay:     var(--palette-neutral-800);
+
+  /* Sidebar — dark in dark mode */
+  --color-bg-sidebar:          var(--palette-neutral-900);
+  --color-border-sidebar:      var(--palette-neutral-800);
+  --color-text-sidebar:        var(--palette-neutral-400);
+  --color-text-sidebar-active: var(--palette-neutral-50);
+  --color-bg-sidebar-active:   var(--palette-neutral-800);
+  --color-bg-sidebar-hover:    rgba(255, 255, 255, 0.05);
+
+  /* Text */
+  --color-text-primary:   var(--palette-neutral-50);
+  --color-text-secondary: var(--palette-neutral-400);
+  --color-text-tertiary:  var(--palette-neutral-600);
+  --color-text-inverse:   var(--palette-neutral-950);
+  --color-text-link:      var(--palette-brand-200);
+
+  /* Borders */
+  --color-border-default: var(--palette-neutral-800);
+  --color-border-strong:  var(--palette-neutral-700);
+  --color-border-focus:   var(--palette-brand-500);
+
+  /* Brand */
+  --color-brand:          var(--palette-brand-500);
+  --color-brand-hover:    var(--palette-brand-600);
+  --color-brand-subtle:   rgba(59, 130, 246, 0.1);
+  --color-brand-text:     var(--palette-brand-200);
+
+  /* Status */
+  --color-status-up:           var(--palette-success-500);
+  --color-status-up-bg:        rgba(34, 197, 94, 0.1);
+  --color-status-up-text:      var(--palette-success-500);
+  --color-status-down:         var(--palette-danger-500);
+  --color-status-down-bg:      rgba(239, 68, 68, 0.1);
+  --color-status-down-text:    var(--palette-danger-500);
+  --color-status-paused:       var(--palette-warning-500);
+  --color-status-paused-bg:    rgba(245, 158, 11, 0.1);
+  --color-status-paused-text:  var(--palette-warning-500);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* ─── @theme: Expose tokens as Tailwind utility classes ─────────────────────── */
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Font sizes */
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.25rem;
+  --font-size-2xl:  1.5rem;
+  --font-size-3xl:  1.875rem;
+
+  /* Font weights */
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* Border radius */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.375rem;
+  --radius-lg:   0.5rem;
+  --radius-xl:   0.75rem;
+  --radius-2xl:  1rem;
+  --radius-full: 9999px;
+
+  /* Layout constants */
+  --width-sidebar:   240px;
+  --height-topnav:   56px;
+
+  /* Semantic color utilities */
+  --color-bg-app:              var(--color-bg-app);
+  --color-bg-surface:          var(--color-bg-surface);
+  --color-bg-sunken:           var(--color-bg-sunken);
+  --color-bg-overlay:          var(--color-bg-overlay);
+  --color-bg-sidebar:          var(--color-bg-sidebar);
+  --color-border-sidebar:      var(--color-border-sidebar);
+  --color-text-sidebar:        var(--color-text-sidebar);
+  --color-text-sidebar-active: var(--color-text-sidebar-active);
+  --color-bg-sidebar-active:   var(--color-bg-sidebar-active);
+  --color-bg-sidebar-hover:    var(--color-bg-sidebar-hover);
+  --color-text-primary:        var(--color-text-primary);
+  --color-text-secondary:      var(--color-text-secondary);
+  --color-text-tertiary:       var(--color-text-tertiary);
+  --color-text-inverse:        var(--color-text-inverse);
+  --color-text-link:           var(--color-text-link);
+  --color-border-default:      var(--color-border-default);
+  --color-border-strong:       var(--color-border-strong);
+  --color-border-focus:        var(--color-border-focus);
+  --color-brand:               var(--color-brand);
+  --color-brand-hover:         var(--color-brand-hover);
+  --color-brand-subtle:        var(--color-brand-subtle);
+  --color-brand-text:          var(--color-brand-text);
+  --color-status-up:           var(--color-status-up);
+  --color-status-up-bg:        var(--color-status-up-bg);
+  --color-status-up-text:      var(--color-status-up-text);
+  --color-status-down:         var(--color-status-down);
+  --color-status-down-bg:      var(--color-status-down-bg);
+  --color-status-down-text:    var(--color-status-down-text);
+  --color-status-paused:       var(--color-status-paused);
+  --color-status-paused-bg:    var(--color-status-paused-bg);
+  --color-status-paused-text:  var(--color-status-paused-text);
+  --shadow-sm:                 var(--shadow-sm);
+  --shadow-md:                 var(--shadow-md);
+  --shadow-lg:                 var(--shadow-lg);
+}
+
+/* ─── Base styles ────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Smooth theme transitions — only color properties, not layout */
+body *,
+body *::before,
+body *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
