@@ -96,7 +96,12 @@ async function handleRequest(request: NextRequest, segments: string[]): Promise<
     ? await request.text()
     : undefined;
 
-  const apiResponse = await fetch(`${API_BASE_URL}/${apiPath}`, {
+  const queryString = request.nextUrl.searchParams.toString();
+  const upstreamUrl = queryString
+    ? `${API_BASE_URL}/${apiPath}?${queryString}`
+    : `${API_BASE_URL}/${apiPath}`;
+
+  const apiResponse = await fetch(upstreamUrl, {
     method: request.method,
     headers,
     body,
@@ -108,6 +113,13 @@ async function handleRequest(request: NextRequest, segments: string[]): Promise<
       { message: errorData?.message ?? 'Request failed' },
       { status: apiResponse.status },
     );
+  }
+
+  const contentLength = apiResponse.headers.get('content-length');
+  const hasBody = contentLength !== '0' && apiResponse.status !== 204;
+
+  if (!hasBody) {
+    return new NextResponse(null, { status: apiResponse.status });
   }
 
   const data = await apiResponse.json().catch(() => null);
