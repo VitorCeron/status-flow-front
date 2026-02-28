@@ -2,36 +2,27 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
-const changePasswordSchema = z
-  .object({
-    currentPassword: z.string().min(1, 'Current password is required'),
-    newPassword: z.string().min(8, 'New password must be at least 8 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your new password'),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
-
-type ChangePasswordForm = z.infer<typeof changePasswordSchema>;
+import { changePasswordSchema, type ChangePasswordFormValues } from '@/features/settings/schemas';
+import { useChangePassword } from '@/features/settings/hooks/use-change-password';
 
 export default function SettingsPage() {
+  const { onSubmit, isLoading, serverError, isSuccess } = useChangePassword();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ChangePasswordForm>({
+    reset,
+    formState: { errors },
+  } = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
   });
 
-  function onSubmit(data: ChangePasswordForm) {
-    // TODO: call settings service
-    console.log(data);
+  async function handleChangePassword(data: ChangePasswordFormValues) {
+    await onSubmit(data);
+    reset();
   }
 
   return (
@@ -46,7 +37,7 @@ export default function SettingsPage() {
           <CardDescription>Update your account password.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit(handleChangePassword)} noValidate className="flex flex-col gap-4">
             <Input
               type="password"
               label="Current password"
@@ -71,8 +62,14 @@ export default function SettingsPage() {
               error={errors.confirmPassword?.message}
               {...register('confirmPassword')}
             />
+            {serverError && (
+              <p className="text-sm text-status-down-text">{serverError}</p>
+            )}
+            {isSuccess && (
+              <p className="text-sm text-status-up-text">Password changed successfully.</p>
+            )}
             <div className="flex justify-end pt-2">
-              <Button type="submit" loading={isSubmitting}>
+              <Button type="submit" loading={isLoading}>
                 Save password
               </Button>
             </div>

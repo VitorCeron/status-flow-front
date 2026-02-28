@@ -90,3 +90,17 @@ Response:
     }
 }
 ```
+
+# Change password
+
+Method: POST
+Url: {{base_url}}/auth/change-password
+Body:
+```json
+{
+    "old_password": "!@#Abc12345678",
+    "password": "!@#Abc123456789",
+    "password_confirmation": "!@#Abc123456789"
+}
+```
+Response: Status code 204 if success
