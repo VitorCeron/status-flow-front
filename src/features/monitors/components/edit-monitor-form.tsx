@@ -39,7 +39,7 @@ export function EditMonitorForm({ monitor }: EditMonitorFormProps) {
         <h1 className="text-2xl font-bold text-text-primary">Edit monitor</h1>
       </div>
 
-      <div className="max-w-2xl">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>Monitor settings</CardTitle>

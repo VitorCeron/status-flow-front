@@ -8,6 +8,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { LogoutButton } from '@/features/auth/components/logout-button';
 import { useSidebarStore } from '@/stores/sidebar-store';
 import { cn } from '@/utils/cn';
+import Image from 'next/image';
 
 // Nav configs live inside this client component so icon functions
 // never need to cross the server/client boundary as props.
@@ -68,8 +69,15 @@ function SidebarContent({
       {/* Header */}
       <div className="flex h-[var(--height-topnav)] items-center justify-between px-4 border-b border-border-sidebar">
         <Link href={homeHref} className="flex items-center gap-2 font-semibold text-text-primary">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand">
+          <div className="flex h-7 w-7 items-center justify-center">
             <Activity className="h-4 w-4 text-white" />
+            <Image
+                src="/images/logo.png"
+                className='rounded'
+                alt="Logo"
+                width={24}
+                height={24}
+                />
           </div>
           <span className="text-sm">StatusFlow</span>
         </Link>

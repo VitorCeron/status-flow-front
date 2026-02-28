@@ -1,11 +1,15 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Pencil, Globe, Clock, Mail, AlertTriangle, Timer } from 'lucide-react';
+import { ArrowLeft, Activity, TrendingUp, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { getMonitorById } from '@/features/monitors/services/monitors.server';
+import { getMonitorById, getMonitorStats } from '@/features/monitors/services/monitors.server';
 import { MonitorStatus } from '@/features/monitors/types';
+import { ResponseTimeChart } from '@/features/monitors/components/response-time-chart';
+import { ChecksHistoryTable } from '@/features/monitors/components/checks-history-table';
+import { StatusTimeline } from '@/features/monitors/components/status-timeline';
+import { MonitorDetailActions } from '@/features/monitors/components/monitor-detail-actions';
 
 const STATUS_BADGE_VARIANT: Record<MonitorStatus, 'up' | 'down' | 'paused' | 'default'> = {
   [MonitorStatus.UP]: 'up',
@@ -25,24 +29,31 @@ interface MonitorDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+function formatLastFail(lastFail: string | null) {
+  if (!lastFail) return 'Never';
+  return new Date(lastFail).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default async function MonitorDetailPage({ params }: MonitorDetailPageProps) {
   const { id } = await params;
-  const monitor = await getMonitorById(id);
+
+  const [monitor, stats] = await Promise.all([
+    getMonitorById(id),
+    getMonitorStats(id),
+  ]);
 
   if (!monitor) {
     notFound();
   }
 
-  const details = [
-    { icon: Globe, label: 'URL', value: monitor.url },
-    { icon: Clock, label: 'Interval', value: `${monitor.interval / 60} min` },
-    { icon: Timer, label: 'Timeout', value: `${monitor.timeout}s` },
-    { icon: AlertTriangle, label: 'Fail threshold', value: `${monitor.fail_threshold} failures` },
-    { icon: Mail, label: 'Notify email', value: monitor.notify_email },
-  ];
-
   return (
     <div className="flex flex-col gap-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/monitors">
@@ -53,21 +64,20 @@ export default async function MonitorDetailPage({ params }: MonitorDetailPagePro
           </Link>
           <h1 className="text-2xl font-bold text-text-primary">{monitor.name}</h1>
         </div>
-        <Link href={`/monitors/${monitor.id}/edit`}>
-          <Button size="sm" variant="secondary">
-            <Pencil className="h-3.5 w-3.5" />
-            Edit
-          </Button>
-        </Link>
+        <MonitorDetailActions monitorId={monitor.id} monitorName={monitor.name} />
       </div>
 
-      <div className="max-w-2xl flex flex-col gap-4">
+      {/* Top 3 summary cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Status card */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Status</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-text-secondary flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Status
+            </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center gap-3">
+          <CardContent className="flex items-center gap-2 flex-wrap">
             <Badge variant={STATUS_BADGE_VARIANT[monitor.status]} dot>
               {STATUS_LABEL[monitor.status]}
             </Badge>
@@ -76,35 +86,77 @@ export default async function MonitorDetailPage({ params }: MonitorDetailPagePro
           </CardContent>
         </Card>
 
-        {/* Details card */}
+        {/* Uptime card */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Configuration</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-text-secondary flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Uptime (7 days)
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="flex flex-col gap-4">
-              {details.map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-bg-sunken">
-                    <Icon className="h-4 w-4 text-text-secondary" />
-                  </div>
-                  <div>
-                    <dt className="text-xs text-text-secondary">{label}</dt>
-                    <dd className="text-sm font-medium text-text-primary break-all">{value}</dd>
-                  </div>
-                </div>
-              ))}
-            </dl>
+            {stats ? (
+              <p className="text-2xl font-bold text-text-primary">
+                {stats.uptime_percentage.toFixed(1)}
+                <span className="text-base font-medium text-text-secondary ml-1">%</span>
+              </p>
+            ) : (
+              <p className="text-sm text-text-secondary">No data yet</p>
+            )}
           </CardContent>
         </Card>
 
-        {/* Last checked */}
-        {monitor.last_checked_at && (
-          <p className="text-xs text-text-tertiary">
-            Last checked: {new Date(monitor.last_checked_at).toLocaleString()}
-          </p>
-        )}
+        {/* Last fail card */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-text-secondary flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Last fail
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {stats ? (
+              <p className={`text-sm font-medium ${stats.last_fail ? 'text-status-down' : 'text-status-up'}`}>
+                {formatLastFail(stats.last_fail)}
+              </p>
+            ) : (
+              <p className="text-sm text-text-secondary">No data yet</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Chart + History table */}
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Response Time</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponseTimeChart data={stats?.response_time_chart ?? []} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Checks History</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 px-6 pb-6">
+            <ChecksHistoryTable checks={stats?.checks_history ?? []} />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Status timeline */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Status Timeline</CardTitle>
+          <p className="text-xs text-text-secondary">Oldest → newest (last 50 checks)</p>
+        </CardHeader>
+        <CardContent>
+          <StatusTimeline timeline={stats?.status_timeline ?? []} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

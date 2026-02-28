@@ -86,3 +86,40 @@ export interface MonitorListResponse {
   meta: PaginationMeta;
   links: PaginationLinks;
 }
+
+/** Single data point in the response time chart */
+export interface ResponseTimePoint {
+  date: string;
+  avg_ms: number;
+  min_ms: number;
+  max_ms: number;
+}
+
+/** Single entry in the checks history list */
+export interface CheckHistoryItem {
+  id: string;
+  status: MonitorStatus;
+  response_code: number;
+  response_time_ms: number;
+  checked_at: string;
+}
+
+/** Single entry in the status timeline */
+export interface StatusTimelineItem {
+  checked_at: string;
+  status: MonitorStatus;
+}
+
+/** Stats data returned by GET /monitors/:id/stats */
+export interface MonitorStats {
+  response_time_chart: ResponseTimePoint[];
+  checks_history: CheckHistoryItem[];
+  status_timeline: StatusTimelineItem[];
+  uptime_percentage: number;
+  last_fail: string | null;
+}
+
+/** Wrapper shape for stats API response */
+export interface MonitorStatsResponse {
+  data: MonitorStats;
+}

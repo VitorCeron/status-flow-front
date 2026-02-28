@@ -184,3 +184,73 @@ Url: {{base_url}}/monitors/{{uuid}}
 Headers: token
 Body: None
 Response: None
+
+# Stats
+
+Method: GET
+URL: {{base_url}}/monitors/{{uuid}}/stats
+Body: None
+Response:
+
+```json
+{
+  "data": {
+    "response_time_chart": [
+      {
+        "date": "2026-02-24",
+        "avg_ms": 130,
+        "min_ms": 43,
+        "max_ms": 510
+      },
+      {
+        "date": "2026-02-25",
+        "avg_ms": 120,
+        "min_ms": 43,
+        "max_ms": 510
+      },
+      {
+        "date": "2026-02-26",
+        "avg_ms": 120,
+        "min_ms": 43,
+        "max_ms": 510
+      },
+      {
+        "date": "2026-02-27",
+        "avg_ms": 120,
+        "min_ms": 43,
+        "max_ms": 510
+      }
+    ],
+    "checks_history": [
+      {
+        "id": "a12e6643-aebb-4ff1-be7a-f44f7b440dee",
+        "status": "up",
+        "response_code": 200,
+        "response_time_ms": 88,
+        "checked_at": "2026-02-27T15:36:02.000000Z"
+      },
+      {
+        "id": "a12e658d-d5f0-4882-887b-d5970f4e4e62",
+        "status": "up",
+        "response_code": 200,
+        "response_time_ms": 111,
+        "checked_at": "2026-02-27T15:34:03.000000Z"
+      }
+      // ...
+    ],
+    "status_timeline": [
+      {
+        "checked_at": "2026-02-27T15:36:02.000000Z",
+        "status": "up"
+      },
+      {
+        "checked_at": "2026-02-27T15:34:03.000000Z",
+        "status": "up"
+      }
+      // ...
+    ],
+    "uptime_percentage": 100,
+    "last_fail": null
+  }
+}
+```

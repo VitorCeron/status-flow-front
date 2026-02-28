@@ -37,5 +37,9 @@ export async function clientApi<T>(path: string, options: RequestOptions = {}): 
     throw new Error(errorData?.message ?? `Request failed: ${response.status}`);
   }
 
+  if (response.status === 204 || response.headers.get('content-length') === '0') {
+    return undefined as T;
+  }
+
   return response.json() as Promise<T>;
 }

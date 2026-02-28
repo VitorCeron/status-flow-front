@@ -12,7 +12,9 @@ export default async function BackofficeLayout({ children }: { children: React.R
       <Sidebar variant="backoffice" userName={user?.name ?? ''} userEmail={user?.email ?? ''} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopNav />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6">
+          <div className="mx-auto w-full max-w-5xl">{children}</div>
+        </main>
       </div>
     </div>
   );

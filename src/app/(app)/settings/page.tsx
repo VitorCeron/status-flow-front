@@ -35,7 +35,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-2xl">
+    <div className="flex flex-col gap-6">
       {/* Page header */}
       <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
 

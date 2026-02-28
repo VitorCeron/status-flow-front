@@ -22,7 +22,7 @@ export default function NewMonitorPage() {
         <h1 className="text-2xl font-bold text-text-primary">New monitor</h1>
       </div>
 
-      <div className="max-w-2xl">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>Monitor settings</CardTitle>

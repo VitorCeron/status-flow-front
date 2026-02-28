@@ -6,9 +6,7 @@ import { Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/i18n';
 import { listMonitors } from '../services/monitors.client';
-import { useDeleteMonitor } from '../hooks/use-delete-monitor';
 import { MonitorCard } from './monitor-card';
-import { DeleteMonitorDialog } from './delete-monitor-dialog';
 import type { Monitor, PaginationMeta } from '../types';
 
 interface MonitorListProps {
@@ -18,14 +16,11 @@ interface MonitorListProps {
 
 export function MonitorList({ monitors: initialMonitors, meta: initialMeta }: MonitorListProps) {
   const t = useTranslations('monitors');
-  const { onDelete, isLoading: isDeleting } = useDeleteMonitor();
   const [monitors, setMonitors] = useState<Monitor[]>(initialMonitors);
   const [meta, setMeta] = useState<PaginationMeta>(initialMeta);
-  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
-  const pendingMonitor = monitors.find((monitor) => monitor.id === pendingDeleteId);
   const hasMore = meta.current_page < meta.last_page;
 
   async function handleLoadMore() {
@@ -41,13 +36,6 @@ export function MonitorList({ monitors: initialMonitors, meta: initialMeta }: Mo
     } finally {
       setIsLoadingMore(false);
     }
-  }
-
-  async function handleConfirmDelete() {
-    if (!pendingDeleteId) return;
-    await onDelete(pendingDeleteId);
-    setMonitors((current) => current.filter((monitor) => monitor.id !== pendingDeleteId));
-    setPendingDeleteId(null);
   }
 
   if (monitors.length === 0) {
@@ -74,12 +62,7 @@ export function MonitorList({ monitors: initialMonitors, meta: initialMeta }: Mo
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {monitors.map((monitor) => (
-          <MonitorCard
-            key={monitor.id}
-            monitor={monitor}
-            onDelete={setPendingDeleteId}
-            isDeleting={isDeleting && pendingDeleteId === monitor.id}
-          />
+          <MonitorCard key={monitor.id} monitor={monitor} />
         ))}
       </div>
 
@@ -97,15 +80,6 @@ export function MonitorList({ monitors: initialMonitors, meta: initialMeta }: Mo
             {monitors.length} {t('of')} {meta.total}
           </p>
         </div>
-      )}
-
-      {pendingMonitor && (
-        <DeleteMonitorDialog
-          monitorName={pendingMonitor.name}
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setPendingDeleteId(null)}
-          isLoading={isDeleting}
-        />
       )}
     </div>
   );

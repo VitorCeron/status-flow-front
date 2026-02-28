@@ -1,5 +1,5 @@
 import { serverApi } from '@/services/server-api';
-import type { Monitor, MonitorResponse, MonitorListResponse } from '../types';
+import type { Monitor, MonitorResponse, MonitorListResponse, MonitorStats, MonitorStatsResponse } from '../types';
 
 const DEFAULT_PER_PAGE = 10;
 
@@ -27,6 +27,22 @@ export async function getMonitors({
 export async function getMonitorById(id: string): Promise<Monitor | null> {
   try {
     const data = await serverApi<MonitorResponse>(`/monitors/${id}`);
+    return data.data;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Server-side fetch of monitor stats by ID.
+ * Returns null if not found or on error.
+ *
+ * @param id - Monitor UUID
+ * @returns The monitor stats or null
+ */
+export async function getMonitorStats(id: string): Promise<MonitorStats | null> {
+  try {
+    const data = await serverApi<MonitorStatsResponse>(`/monitors/${id}/stats`);
     return data.data;
   } catch {
     return null;
