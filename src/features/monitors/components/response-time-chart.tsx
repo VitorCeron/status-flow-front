@@ -86,7 +86,7 @@ export function ResponseTimeChart({ data }: ResponseTimeChartProps) {
           type="monotone"
           dataKey="max_ms"
           stroke="none"
-          fill="var(--palette-brand-100, #dbeafe)"
+          fill="var(--palette-brand-100, #c4cfdf)"
           fillOpacity={0.5}
           legendType="none"
           name="max_ms"
@@ -104,9 +104,9 @@ export function ResponseTimeChart({ data }: ResponseTimeChartProps) {
         <Line
           type="monotone"
           dataKey="avg_ms"
-          stroke="var(--color-brand, #2563eb)"
+          stroke="var(--color-brand, #09264e)"
           strokeWidth={2}
-          dot={{ r: 3, fill: 'var(--color-brand, #2563eb)', strokeWidth: 0 }}
+          dot={{ r: 3, fill: 'var(--color-brand, #09264e)', strokeWidth: 0 }}
           activeDot={{ r: 5 }}
           name="avg_ms"
         />

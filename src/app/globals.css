@@ -19,13 +19,13 @@
   --palette-neutral-900: #18181b;
   --palette-neutral-950: #09090b;
 
-  /* Brand — calm blue, trustworthy for a monitoring tool */
-  --palette-brand-50:  #eff6ff;
-  --palette-brand-100: #dbeafe;
-  --palette-brand-200: #bfdbfe;
-  --palette-brand-500: #3b82f6;
-  --palette-brand-600: #2563eb;
-  --palette-brand-700: #1d4ed8;
+  /* Brand — deep navy, aligned with project logo */
+  --palette-brand-50:  #e8edf5;
+  --palette-brand-100: #c4cfdf;
+  --palette-brand-200: #8da3bf;
+  --palette-brand-500: #153c72;
+  --palette-brand-600: #09264e;
+  --palette-brand-700: #061a36;
 
   /* Status colors */
   --palette-success-50:  #f0fdf4;
@@ -126,7 +126,7 @@
   /* Brand */
   --color-brand:          var(--palette-brand-500);
   --color-brand-hover:    var(--palette-brand-600);
-  --color-brand-subtle:   rgba(59, 130, 246, 0.1);
+  --color-brand-subtle:   rgba(21, 60, 114, 0.15);
   --color-brand-text:     var(--palette-brand-200);
 
   /* Status */
