@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { changePassword } from '../services/settings.client';
 import type { ChangePasswordFormValues } from '../schemas';
 
@@ -32,8 +33,10 @@ export function useChangePassword(): UseChangePasswordReturn {
         password_confirmation: data.confirmPassword,
       });
       setIsSuccess(true);
+      toast.success('Password updated successfully.');
     } catch (error) {
       setServerError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }

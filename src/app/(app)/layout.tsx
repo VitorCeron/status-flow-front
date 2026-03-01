@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner';
 import { Sidebar } from '@/components/layout/sidebar';
 import { TopNav } from '@/components/layout/top-nav';
 import { getAuthenticatedUser } from '@/features/auth/services/auth.server';
@@ -16,6 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="mx-auto w-full max-w-5xl">{children}</div>
         </main>
       </div>
+      <Toaster position="bottom-right" richColors />
     </div>
   );
 }

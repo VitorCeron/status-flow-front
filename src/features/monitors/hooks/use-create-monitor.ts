@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { createMonitor } from '../services/monitors.client';
 import type { MonitorFormValues } from '../schemas';
 
@@ -26,9 +27,11 @@ export function useCreateMonitor(): UseCreateMonitorReturn {
 
     try {
       await createMonitor(data);
+      toast.success('Monitor created successfully.');
       router.push('/monitors');
     } catch (error) {
       setServerError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }

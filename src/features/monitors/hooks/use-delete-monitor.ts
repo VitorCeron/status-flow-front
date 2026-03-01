@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { deleteMonitor } from '../services/monitors.client';
 
 interface UseDeleteMonitorReturn {
@@ -25,9 +26,11 @@ export function useDeleteMonitor(): UseDeleteMonitorReturn {
 
     try {
       await deleteMonitor(id);
+      toast.success('Monitor deleted.');
       router.refresh();
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete monitor');
+      toast.error(deleteError instanceof Error ? deleteError.message : 'Failed to delete monitor');
     } finally {
       setIsLoading(false);
     }

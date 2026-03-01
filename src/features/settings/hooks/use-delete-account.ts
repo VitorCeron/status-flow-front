@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useAuthStore } from '@/features/auth/stores/auth-store';
 import { deleteAccount } from '../services/settings.client';
 
@@ -28,9 +29,11 @@ export function useDeleteAccount(): UseDeleteAccountReturn {
     try {
       await deleteAccount();
       clearAuth();
+      toast.success('Your account has been deleted.');
       router.push('/login');
     } catch (error) {
       setServerError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }

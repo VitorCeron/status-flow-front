@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 import { logoutUser } from '../services/auth.client';
 import { useAuthStore } from '../stores/auth-store';
 import { cn } from '@/utils/cn';
@@ -17,8 +18,10 @@ export function LogoutButton() {
     try {
       await logoutUser();
       clearAuth();
+      toast.success('Signed out successfully.');
       router.push('/login');
-    } finally {
+    } catch {
+      toast.error('Failed to sign out.');
       setIsLoading(false);
     }
   }

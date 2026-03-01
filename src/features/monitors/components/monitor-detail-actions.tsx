@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { DeleteMonitorDialog } from './delete-monitor-dialog';
 import { deleteMonitor } from '../services/monitors.client';
@@ -22,8 +23,10 @@ export function MonitorDetailActions({ monitorId, monitorName }: MonitorDetailAc
     setIsDeleting(true);
     try {
       await deleteMonitor(monitorId);
+      toast.success('Monitor deleted.');
       router.push('/monitors');
-    } finally {
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to delete monitor');
       setIsDeleting(false);
       setShowDialog(false);
     }

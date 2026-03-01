@@ -12,7 +12,7 @@ import { useDeleteAccount } from '@/features/settings/hooks/use-delete-account';
 import { DeleteAccountDialog } from '@/features/settings/components/delete-account-dialog';
 
 export default function SettingsPage() {
-  const { onSubmit, isLoading, serverError, isSuccess } = useChangePassword();
+  const { onSubmit, isLoading, serverError } = useChangePassword();
   const { onDelete, isLoading: isDeleting, serverError: deleteError } = useDeleteAccount();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -74,9 +74,6 @@ export default function SettingsPage() {
             />
             {serverError && (
               <p className="text-sm text-status-down-text">{serverError}</p>
-            )}
-            {isSuccess && (
-              <p className="text-sm text-status-up-text">Password changed successfully.</p>
             )}
             <div className="flex justify-end pt-2">
               <Button type="submit" loading={isLoading}>

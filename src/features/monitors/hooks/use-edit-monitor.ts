@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { updateMonitor } from '../services/monitors.client';
 import type { MonitorFormValues } from '../schemas';
 
@@ -28,9 +29,11 @@ export function useEditMonitor(id: string): UseEditMonitorReturn {
 
     try {
       await updateMonitor(id, data);
+      toast.success('Monitor updated successfully.');
       router.push('/monitors');
     } catch (error) {
       setServerError(error instanceof Error ? error.message : 'An unexpected error occurred');
+      toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
