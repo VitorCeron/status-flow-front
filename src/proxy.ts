@@ -4,7 +4,7 @@ import { AUTH_COOKIE_NAME, AUTH_ROLE_COOKIE_NAME, ROLE_REDIRECT, DEFAULT_REDIREC
 const PROTECTED_PREFIXES = ['/dashboard', '/monitors', '/settings', '/backoffice'];
 const GUEST_ONLY_ROUTES = ['/login', '/register', '/forgot-password'];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
   const role = request.cookies.get(AUTH_ROLE_COOKIE_NAME)?.value;
