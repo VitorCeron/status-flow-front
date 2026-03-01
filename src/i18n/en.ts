@@ -105,6 +105,11 @@ export const en = {
     deleteAccount: 'Delete account',
     deleteAccountDesc: 'Permanently delete your account and all your monitors. This action cannot be undone.',
     deleteAccountConfirm: 'Delete my account',
+    deleteAccountModalTitle: 'Delete your account',
+    deleteAccountModalDesc: 'This action is irreversible. Type CONFIRM to proceed.',
+    deleteAccountModalPlaceholder: 'Type CONFIRM',
+    deleteAccountModalConfirmWord: 'CONFIRM',
+    cancel: 'Cancel',
   },
 } as const;
 

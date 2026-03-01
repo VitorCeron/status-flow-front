@@ -104,3 +104,10 @@ Body:
 }
 ```
 Response: Status code 204 if success
+
+# Delete account
+
+Method: DELETE
+Url: {{base_url}}/auth/account
+Body: None
+Response: Status code 204 if success

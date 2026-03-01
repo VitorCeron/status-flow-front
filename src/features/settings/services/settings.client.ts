@@ -13,3 +13,14 @@ export async function changePassword(payload: ChangePasswordRequest): Promise<vo
     body: payload,
   });
 }
+
+/**
+ * Sends a DELETE request through the proxy Route Handler to permanently
+ * remove the authenticated user's account.
+ * Returns 204 No Content on success.
+ */
+export async function deleteAccount(): Promise<void> {
+  await clientApi<void>('/auth/account', {
+    method: 'DELETE',
+  });
+}

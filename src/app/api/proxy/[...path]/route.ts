@@ -39,6 +39,23 @@ async function handleAuthResponse(apiResponse: Response): Promise<NextResponse> 
   return response;
 }
 
+async function handleDeleteAccount(token: string | undefined): Promise<NextResponse> {
+  if (token) {
+    await fetch(`${API_BASE_URL}/auth/account`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    }).catch(() => {});
+  }
+
+  const response = new NextResponse(null, { status: 204 });
+  response.cookies.delete(AUTH_COOKIE_NAME);
+  response.cookies.delete(AUTH_ROLE_COOKIE_NAME);
+  return response;
+}
+
 async function handleLogout(): Promise<NextResponse> {
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
@@ -80,6 +97,10 @@ async function handleRequest(request: NextRequest, segments: string[]): Promise<
 
   if (apiPath === 'auth/logout') {
     return handleLogout();
+  }
+
+  if (apiPath === 'auth/account' && request.method === 'DELETE') {
+    return handleDeleteAccount(token);
   }
 
   // Generic transparent proxy for all other routes

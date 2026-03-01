@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -7,9 +8,18 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { changePasswordSchema, type ChangePasswordFormValues } from '@/features/settings/schemas';
 import { useChangePassword } from '@/features/settings/hooks/use-change-password';
+import { useDeleteAccount } from '@/features/settings/hooks/use-delete-account';
+import { DeleteAccountDialog } from '@/features/settings/components/delete-account-dialog';
 
 export default function SettingsPage() {
   const { onSubmit, isLoading, serverError, isSuccess } = useChangePassword();
+  const { onDelete, isLoading: isDeleting, serverError: deleteError } = useDeleteAccount();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  async function handleConfirmDelete() {
+    await onDelete();
+    setShowDeleteDialog(false);
+  }
 
   const {
     register,
@@ -86,11 +96,22 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="danger">
+          {deleteError && (
+            <p className="text-sm text-status-down-text mb-4">{deleteError}</p>
+          )}
+          <Button variant="danger" onClick={() => setShowDeleteDialog(true)}>
             Delete my account
           </Button>
         </CardContent>
       </Card>
+
+      {showDeleteDialog && (
+        <DeleteAccountDialog
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowDeleteDialog(false)}
+          isLoading={isDeleting}
+        />
+      )}
     </div>
   );
 }
