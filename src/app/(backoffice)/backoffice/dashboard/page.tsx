@@ -1,40 +1,12 @@
-'use client';
-
 import { Users, Activity, CheckCircle2, XCircle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { StatsCard } from '@/features/dashboard/components/stats-card';
+import { getBackofficeDashboard } from '@/features/backoffice/dashboard/services/dashboard.server';
+import { LastUsersTable } from '@/features/backoffice/dashboard/components/last-users-table';
+import { TimezonesTable } from '@/features/backoffice/dashboard/components/timezones-table';
 
-const STATS = [
-  {
-    label: 'Total Users',
-    value: 0,
-    icon: Users,
-    iconClass: 'text-brand',
-    iconBg: 'bg-brand-subtle',
-  },
-  {
-    label: 'Total Monitors',
-    value: 0,
-    icon: Activity,
-    iconClass: 'text-text-secondary',
-    iconBg: 'bg-bg-sunken',
-  },
-  {
-    label: 'Monitors Up',
-    value: 0,
-    icon: CheckCircle2,
-    iconClass: 'text-status-up',
-    iconBg: 'bg-status-up-bg',
-  },
-  {
-    label: 'Monitors Down',
-    value: 0,
-    icon: XCircle,
-    iconClass: 'text-status-down',
-    iconBg: 'bg-status-down-bg',
-  },
-];
+export default async function BackofficeDashboardPage() {
+  const { data } = await getBackofficeDashboard();
 
-export default function BackofficeDashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       {/* Page header */}
@@ -47,21 +19,20 @@ export default function BackofficeDashboardPage() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {STATS.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="pt-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-text-secondary">{stat.label}</p>
-                  <p className="mt-1 text-2xl font-bold text-text-primary">{stat.value}</p>
-                </div>
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.iconBg}`}>
-                  <stat.icon className={`h-5 w-5 ${stat.iconClass}`} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        <StatsCard label="Total Users" value={data.total_users} icon={Users} iconClass="text-brand" iconBg="bg-brand-subtle" />
+        <StatsCard label="Total Monitors" value={data.total_monitors} icon={Activity} iconClass="text-text-secondary" iconBg="bg-bg-sunken" />
+        <StatsCard label="Monitors Up" value={data.total_up} icon={CheckCircle2} iconClass="text-status-up" iconBg="bg-status-up-bg" />
+        <StatsCard label="Monitors Down" value={data.total_down} icon={XCircle} iconClass="text-status-down" iconBg="bg-status-down-bg" />
+      </div>
+
+      {/* Tables */}
+      <div className="grid grid-cols-10 items-stretch gap-4">
+        <div className="col-span-10 lg:col-span-7">
+          <LastUsersTable users={data.last_users} />
+        </div>
+        <div className="col-span-10 h-full lg:col-span-3">
+          <TimezonesTable timezones={data.timezones} />
+        </div>
       </div>
     </div>
   );
