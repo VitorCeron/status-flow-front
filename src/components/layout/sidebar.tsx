@@ -24,11 +24,6 @@ const USER_BOTTOM_NAV_ITEMS = [
 const BACKOFFICE_NAV_ITEMS = [
   { href: '/backoffice/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/backoffice/users', label: 'Users', icon: Users },
-  { href: '/backoffice/monitors', label: 'All Monitors', icon: Activity },
-];
-
-const BACKOFFICE_BOTTOM_NAV_ITEMS = [
-  { href: '/backoffice/settings', label: 'Settings', icon: Settings },
 ];
 
 export type SidebarVariant = 'user' | 'backoffice';
@@ -44,10 +39,10 @@ function getNavConfig(variant: SidebarVariant) {
   if (variant === 'backoffice') {
     return {
       navItems: BACKOFFICE_NAV_ITEMS,
-      bottomNavItems: BACKOFFICE_BOTTOM_NAV_ITEMS,
       homeHref: '/backoffice/dashboard',
     };
   }
+
   return {
     navItems: USER_NAV_ITEMS,
     bottomNavItems: USER_BOTTOM_NAV_ITEMS,
@@ -100,7 +95,7 @@ function SidebarContent({
       </nav>
 
       {/* Bottom nav */}
-      {bottomNavItems.length > 0 && (
+      {bottomNavItems && bottomNavItems.length > 0 && (
         <div className="px-3 pb-4 space-y-1">
           {bottomNavItems.map((item) => (
             <NavItem key={item.href} {...item} />
