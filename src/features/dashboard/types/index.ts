@@ -15,6 +15,7 @@ export interface DashboardData {
   total_monitors: number;
   total_up: number;
   total_down: number;
+  total_paused: number;
   last_monitors: DashboardMonitor[];
 }
 

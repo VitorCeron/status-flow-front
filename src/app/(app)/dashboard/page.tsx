@@ -9,7 +9,6 @@ import { LastMonitorsList } from '@/features/dashboard/components/last-monitors-
 export default async function DashboardPage() {
   const { data } = await getDashboard();
 
-  const totalPaused = data.total_monitors - data.total_up - data.total_down;
   const hasMonitors = data.total_monitors > 0;
 
   return (
@@ -30,7 +29,7 @@ export default async function DashboardPage() {
         <StatsCard label="Total Monitors" value={data.total_monitors} icon={Activity} iconClass="text-brand" iconBg="bg-brand-subtle" />
         <StatsCard label="Up" value={data.total_up} icon={CheckCircle2} iconClass="text-status-up" iconBg="bg-status-up-bg" />
         <StatsCard label="Down" value={data.total_down} icon={XCircle} iconClass="text-status-down" iconBg="bg-status-down-bg" />
-        <StatsCard label="Paused" value={totalPaused} icon={PauseCircle} iconClass="text-status-paused" iconBg="bg-status-paused-bg" />
+        <StatsCard label="Paused" value={data.total_paused} icon={PauseCircle} iconClass="text-status-paused" iconBg="bg-status-paused-bg" />
       </div>
 
       {/* Empty state or last monitors list */}

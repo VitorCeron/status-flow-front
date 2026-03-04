@@ -6,20 +6,35 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { changePasswordSchema, type ChangePasswordFormValues } from '@/features/settings/schemas';
+import { Combobox } from '@/components/ui/combobox';
+import { changePasswordSchema, type ChangePasswordFormValues, updateProfileSchema, type UpdateProfileFormValues } from '@/features/settings/schemas';
 import { useChangePassword } from '@/features/settings/hooks/use-change-password';
 import { useDeleteAccount } from '@/features/settings/hooks/use-delete-account';
+import { useUpdateProfile } from '@/features/settings/hooks/use-update-profile';
 import { DeleteAccountDialog } from '@/features/settings/components/delete-account-dialog';
+import { useAuthStore } from '@/features/auth/stores/auth-store';
 
 export default function SettingsPage() {
+  const user = useAuthStore((s) => s.user);
+
+  const { onSubmit: onUpdateProfile, isLoading: isUpdatingProfile, serverError: profileError, timezones, isLoadingTimezones } = useUpdateProfile();
   const { onSubmit, isLoading, serverError } = useChangePassword();
   const { onDelete, isLoading: isDeleting, serverError: deleteError } = useDeleteAccount();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  async function handleConfirmDelete() {
-    await onDelete();
-    setShowDeleteDialog(false);
-  }
+  const {
+    register: registerProfile,
+    handleSubmit: handleSubmitProfile,
+    setValue: setProfileValue,
+    watch: watchProfile,
+    formState: { errors: profileErrors },
+  } = useForm<UpdateProfileFormValues>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: {
+      name: user?.name ?? '',
+      timezone: user?.timezone ?? '',
+    },
+  });
 
   const {
     register,
@@ -30,6 +45,11 @@ export default function SettingsPage() {
     resolver: zodResolver(changePasswordSchema),
   });
 
+  async function handleConfirmDelete() {
+    await onDelete();
+    setShowDeleteDialog(false);
+  }
+
   async function handleChangePassword(data: ChangePasswordFormValues) {
     await onSubmit(data);
     reset();
@@ -39,6 +59,43 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-6">
       {/* Page header */}
       <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
+
+      {/* Profile information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile information</CardTitle>
+          <CardDescription>Update your name and timezone.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmitProfile(onUpdateProfile)} noValidate className="flex flex-col gap-4">
+            <Input
+              label="Name"
+              placeholder="Your name"
+              autoComplete="name"
+              error={profileErrors.name?.message}
+              {...registerProfile('name')}
+            />
+            <Combobox
+              label="Timezone"
+              options={timezones}
+              value={watchProfile('timezone')}
+              onChange={(val) => setProfileValue('timezone', val, { shouldValidate: true })}
+              placeholder="Select a timezone"
+              searchPlaceholder="Search timezone..."
+              disabled={isLoadingTimezones}
+              error={profileErrors.timezone?.message}
+            />
+            {profileError && (
+              <p className="text-sm text-status-down-text">{profileError}</p>
+            )}
+            <div className="flex justify-end pt-2">
+              <Button type="submit" loading={isUpdatingProfile}>
+                Save profile
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* Change password */}
       <Card>

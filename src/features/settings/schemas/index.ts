@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const updateProfileSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  timezone: z.string().min(1, 'Timezone is required'),
+});
+
+export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;
+
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'Current password is required'),

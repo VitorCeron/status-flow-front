@@ -1,5 +1,6 @@
 import { clientApi } from '@/services/client-api';
-import type { ChangePasswordRequest } from '../types';
+import type { AuthUser } from '@/features/auth/types';
+import type { ChangePasswordRequest, TimezoneOption, TimezoneListResponse, UpdateProfileRequest } from '../types';
 
 /**
  * Sends a change-password request through the proxy Route Handler.
@@ -23,4 +24,17 @@ export async function deleteAccount(): Promise<void> {
   await clientApi<void>('/auth/account', {
     method: 'DELETE',
   });
+}
+
+export async function getTimezones(): Promise<TimezoneOption[]> {
+  const response = await clientApi<TimezoneListResponse>('/profile/timezones');
+  return response.data;
+}
+
+export async function updateProfile(payload: UpdateProfileRequest): Promise<AuthUser> {
+  const response = await clientApi<{ data: AuthUser }>('/profile/settings', {
+    method: 'PATCH',
+    body: payload,
+  });
+  return response.data;
 }
