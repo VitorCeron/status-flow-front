@@ -9,7 +9,7 @@ This project was built as a portfolio piece to demonstrate real-world frontend a
 ## Features
 
 - **Authentication** — Login, register, and password recovery flows
-- **Dashboard** — At-a-glance stats: total monitors, how many are up/down/paused, and a quick list of recently created monitors
+- **Dashboard** — Summary statistics: total monitors, how many are up/down/paused, and a quick list of recently created monitors
 - **Monitor management** — Create, edit, pause, and delete HTTP monitors with configurable interval, timeout, HTTP method, and failure threshold
 - **Monitor detail** — Per-monitor view with:
   - 7-day uptime percentage
@@ -25,16 +25,16 @@ This project was built as a portfolio piece to demonstrate real-world frontend a
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| UI | React 19, Tailwind CSS v4 |
-| State | Zustand |
-| Forms | React Hook Form + Zod |
-| Charts | Recharts |
-| Icons | Lucide React |
-| Font | Geist |
-| Language | TypeScript 5 |
+| Layer     | Technology                |
+| --------- | ------------------------- |
+| Framework | Next.js 16 (App Router)   |
+| UI        | React 19, Tailwind CSS v4 |
+| State     | Zustand                   |
+| Forms     | React Hook Form + Zod     |
+| Charts    | Recharts                  |
+| Icons     | Lucide React              |
+| Font      | Geist                     |
+| Language  | TypeScript 5              |
 
 ---
 
@@ -54,12 +54,14 @@ The solution is an inline `<script>` injected in the root `layout.tsx` that runs
 
 ```tsx
 // layout.tsx — runs before hydration
-<script dangerouslySetInnerHTML={{
-  __html: `(function(){
+<script
+  dangerouslySetInnerHTML={{
+    __html: `(function(){
     const t = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', t);
-  })()`
-}} />
+  })()`,
+  }}
+/>
 ```
 
 ### 3. Tailwind v4 custom design tokens
@@ -87,6 +89,8 @@ The challenge here is mixing client interactivity (delete button, edit navigatio
 As the app grew, a flat components folder became hard to navigate. The project adopts a feature-based structure under `src/features/` where each domain (auth, monitors, dashboard) owns its components, hooks, schemas, services, and types.
 
 This makes it easy to find everything related to a feature in one place and delete a feature without hunting across the codebase.
+
+This approach maintains best practices by keeping related logic in the same place for easier maintenance.
 
 ```
 src/features/monitors/
@@ -117,7 +121,6 @@ src/
 │   └── dashboard/
 ├── stores/              # Zustand stores (theme, sidebar)
 ├── services/            # Base fetch wrappers (server + client)
-├── hooks/               # Global hooks
 ├── i18n/                # Translations
 └── utils/               # Utility functions
 ```
@@ -137,8 +140,8 @@ src/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/status-flow.git
-   cd status-flow
+   git clone github.com/VitorCeron/status-flow-front
+   cd status-flow-front
    ```
 
 2. **Install dependencies**
@@ -176,18 +179,46 @@ src/
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Create optimized production build |
-| `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
+| Command         | Description                              |
+| --------------- | ---------------------------------------- |
+| `npm run dev`   | Start development server with hot reload |
+| `npm run build` | Create optimized production build        |
+| `npm start`     | Start production server                  |
+| `npm run lint`  | Run ESLint                               |
 
-<!-- --- -->
+## Screenshots
 
-<!-- ## Screenshots
+### Login
 
-> _Add screenshots or a screen recording of the app here._ -->
+![Login](./public/images/project/login-page.png "Login")
+
+### User
+
+Dashboard user
+![Dashboard user](./public/images/project/dashboard-user.png "Dashboard user")
+
+Dashboard user darkmode
+![Dashboard user darkmode](./public/images/project/dashboard-user-darkmode.png "Dashboard user darkmode")
+
+Monitors list
+![Monitors list](./public/images/project/monitors-list-user.png "Monitors list")
+
+Create / edit monitor
+![Create / edit monitor](./public/images/project/create-edit-monitor-user.png "Create / edit monitor")
+
+Settings
+![Settings](./public/images/project/settings-page-user.png "Settings")
+
+### Backoffice
+
+Dashboard
+![Dashboard](./public/images/project/backoffice-dashboard.png "Dashboard")
+
+Users list
+![Users list](./public/images/project/backoffice-users-list.png "Users list")
+
+User details
+![User details](./public/images/project/backoffice-users-details.png "User details")
 
 ---
 
